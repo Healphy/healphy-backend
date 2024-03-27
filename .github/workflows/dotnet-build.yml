@@ -59,6 +59,7 @@ jobs:
 
   terraform:
     name: Create IaC Terraform
+    if: false
 
     runs-on: windows-latest
     needs: build

@@ -54,7 +54,8 @@ jobs:
 
     - name: Zip Package
       run: |
-        zip -r ${{ github.workspace }}/out.zip *
+        cd '${{ github.workspace }}/out'
+        Compress-Archive -Path * -DestinationPath ${{ github.workspace }}/out.zip
 
   terraform:
     name: Create IaC Terraform

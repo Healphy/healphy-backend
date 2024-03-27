@@ -49,13 +49,13 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Dotnet Publish
-      run: dotnet publish -c Release -o '${{ github.workspace }}/out'
+      run: dotnet publish -c Release -o '${{ github.workspace }}\out'
 
 
     - name: Zip Package
       run: |
         cd '${{ github.workspace }}/out'
-        Compress-Archive -Path * -DestinationPath ${{ github.workspace }}/out.zip
+        Compress-Archive -Path * -DestinationPath ${{ github.workspace }}\out.zip
 
   deploy:
     name: Deploy AWS
@@ -72,6 +72,6 @@ jobs:
             application_name: healphy-backend
             environment_name: healphy-env
             version_label: ${{ github.run_id }}
-            deployment_package: ${{ github.workspace }}/out.zip
+            deployment_package: ${{ github.workspace }}\out.zip
 
         

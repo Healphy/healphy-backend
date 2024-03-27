@@ -11,6 +11,8 @@ terraform {
 
 provider "aws" {
   region     = "us-east-1"
+  access_key = "AKIA6GBMB67HOJ4ONHWW"
+  secret_key = "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"
 }
 
 resource "aws_iam_role" "beanstalk_service" {

@@ -57,49 +57,10 @@ jobs:
         cd '${{ github.workspace }}/out'
         Compress-Archive -Path * -DestinationPath ${{ github.workspace }}/out.zip
 
-  terraform:
-    name: Create IaC Terraform
-    if: false
-
-    runs-on: windows-latest
-    needs: build
-
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-
-        - name: Setup Terraform  
-          uses: hashicorp/setup-terraform@v3
-          
-        - name: Terraform Init
-          run: terraform init
-          env:
-            AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
-            REGION: 
-
-        - name: Terraform fmt
-          run: terraform fmt -check
-          continue-on-error: true
-            
-        
-        - name: Terraform Validate
-          run: terraform validate -no-color
-        
-        - name: Terraform Plan
-          run: terraform plan -no-color
-
-        - name: Terraform Apply
-          run: terraform apply -auto-approve
-
   deploy:
     name: Deploy AWS
     runs-on: windows-latest
-    needs: terraform
+    needs: build
 
     steps:
         - name: Deploy Backend

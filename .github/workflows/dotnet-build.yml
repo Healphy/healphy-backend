@@ -1,0 +1,115 @@
+name: Healphy
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+  PUBLIC_SUBNETS: ${{ secrets.PUBLIC_SUBNETS }}
+  VPC_ID: ${{ secrets.VPC_ID }}
+
+permissions:
+    id-token: write
+    contents: read
+
+on:
+  push:
+    branches:
+        - main
+        - develop
+        - 'feature/**'
+  pull_request:
+    branches:
+        - main
+        - develop
+        - 'feature/**'
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        dotnet-version: ['8.0.x']
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Install the .NET Core workload
+    - name: Install .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Restore the application
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Dotnet Publish
+      run: dotnet publish -c Release -o '${{ github.workspace }}/out'
+
+
+    - name: Zip Package
+      run: |
+        cd '${{ github.workspace }}/out'
+        zip -r ${{ github.workspace }}/out.zip *
+
+  terraform:
+    name: Create IaC Terraform
+
+    runs-on: windows-latest
+    needs: build
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Setup Terraform  
+          uses: hashicorp/setup-terraform@v3
+          
+        - name: Terraform Init
+          run: terraform init
+          env:
+            AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+            REGION: 
+
+        - name: Terraform fmt
+          run: terraform fmt -check
+          continue-on-error: true
+            
+        
+        - name: Terraform Validate
+          run: terraform validate -no-color
+        
+        - name: Terraform Plan
+          run: terraform plan -no-color -var="vpc_id=${{ env.VPC_ID }}" -var="public_subnets=${{ env.PUBLIC_SUBNETS }}"
+
+        - name: Terraform Apply
+          run: terraform apply -auto-approve
+
+  deploy:
+    name: Deploy AWS
+    runs-on: windows-latest
+    needs: terraform
+
+    steps:
+        - name: Deploy Backend
+          uses: einaregilsson/beanstalk-deploy@v21
+          with:
+            aws_access_key: ${{ env.AWS_ACCESS_KEY_ID }}
+            aws_secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+            region: us-east-1
+            application_name: healphy-backend
+            environment_name: healphy-env
+            version_label: ${{ github.run_id }}
+            deployment_package: ${{ github.workspace }}/out.zip
+
+        

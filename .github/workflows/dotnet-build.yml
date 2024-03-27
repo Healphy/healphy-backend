@@ -90,14 +90,7 @@ jobs:
           run: terraform validate -no-color
         
         - name: Terraform Plan
-          run: |
-            IFS=',' read -ra PUBLIC_SUBNETS_ARRAY <<< "${{ env.PUBLIC_SUBNETS }}"
-            PUBLIC_SUBNETS_LIST=""
-            for subnet in "${PUBLIC_SUBNETS_ARRAY[@]}"; do
-            PUBLIC_SUBNETS_LIST+="\"$subnet\", "
-            done
-            PUBLIC_SUBNETS_LIST="${PUBLIC_SUBNETS_LIST::-2}" # Removendo a última vírgula e espaço extra
-            terraform plan -no-color -var="vpc_id=${{ env.VPC_ID }}" -var="public_subnets=${{ env.PUBLIC_SUBNETS }}"
+          run: terraform plan -no-color -var="vpc_id=${{ env.VPC_ID }}" -var="public_subnets=${{ env.PUBLIC_SUBNETS }}"
 
         - name: Terraform Apply
           run: terraform apply -auto-approve

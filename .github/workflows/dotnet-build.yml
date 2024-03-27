@@ -71,6 +71,11 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v3
 
+        - name: Write variables to file
+          run: |
+            echo "vpc_id = \"${env.VPC_ID}\"" > terraform.tfvars
+            echo "public_subnets = ${env.PUBLIC_SUBNETS}" >> terraform.tfvars
+
         - name: Setup Terraform  
           uses: hashicorp/setup-terraform@v3
           
@@ -90,7 +95,7 @@ jobs:
           run: terraform validate -no-color
         
         - name: Terraform Plan
-          run: terraform plan -no-color -var="vpc_id=${{ env.VPC_ID }}" -var="public_subnets=${{ env.PUBLIC_SUBNETS }}"
+          run: terraform plan -no-color -var-file=terraform.tfvars
 
         - name: Terraform Apply
           run: terraform apply -auto-approve

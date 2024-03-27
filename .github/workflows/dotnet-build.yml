@@ -54,7 +54,7 @@ jobs:
 
     - name: Zip Package
       run: |
-        cd '${{ github.workspace }}/out'
+        cd ${{ github.workspace }}\out
         Compress-Archive -Path * -DestinationPath ${{ github.workspace }}\out.zip
 
   deploy:

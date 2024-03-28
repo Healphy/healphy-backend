@@ -58,9 +58,7 @@ jobs:
         path: ${{ github.workspace }}/out
 
     - name: Zip Package
-      run: |
-        cd ${{ github.workspace }}/out 
-        zip -r ${{ github.workspace }}/out.zip *
+      run: zip -r ${{ github.workspace }}/out.zip
     
   deploy:
     name: Deploy AWS
@@ -68,6 +66,9 @@ jobs:
     needs: build
 
     steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+  
         - name: Deploy Backend
           uses: einaregilsson/beanstalk-deploy@v21
           with:

@@ -49,16 +49,16 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Dotnet Publish
-      run: dotnet publish -c Release --property:PublishDir='D:\a\healphy-backend\healphy-backend\'
+      run: dotnet publish -c Release --property:PublishDir='.'
         
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: dotnet-results
-        path: 'D:\a\healphy-backend\healphy-backend\'
+        path: '.'
 
     - name: Zip Package
-      run: zip -r D:\a\healphy-backend\healphy-backend\deploy.zip . -x '*.git*'
+      run: zip -r deploy.zip . -x '*.git*'
     
   deploy:
     name: Deploy AWS

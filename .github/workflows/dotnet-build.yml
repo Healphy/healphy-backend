@@ -50,12 +50,18 @@ jobs:
 
     - name: Dotnet Publish
       run: dotnet publish -c Release -o '${{ github.workspace }}/out'
-  
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: dotnet-results
+        path: ${{ github.workspace }}/out
+
     - name: Zip Package
       run: |
         cd ${{ github.workspace }}/out 
         zip -r ${{ github.workspace }}/out.zip *
-
+    
   deploy:
     name: Deploy AWS
     runs-on: windows-latest

@@ -77,6 +77,6 @@ jobs:
             application_name: healphy-backend
             environment_name: healphy-env
             version_label: ${{ github.run_id }}
-            deployment_package: ${{ github.workspace }}/out.zip
+            deployment_package: /home/runner/work/healphy-backend/healphy-backend/out.zip
 
         

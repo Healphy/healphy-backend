@@ -49,16 +49,16 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Dotnet Publish
-      run: dotnet publish -c Release --property:PublishDir='${{ github.workspace }}/out'
+      run: dotnet publish -c Release --property:PublishDir='.'
         
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: dotnet-results
-        path: ${{ github.workspace }}/out
+        path: '.'
 
     - name: Zip Package
-      run: zip -r ${{ github.workspace }}/out.zip
+      run: zip -r deploy.zip . -x '*.git*'
     
   deploy:
     name: Deploy AWS
@@ -78,6 +78,6 @@ jobs:
             application_name: healphy-backend
             environment_name: healphy-env
             version_label: ${{ github.run_id }}
-            deployment_package: /home/runner/work/healphy-backend/healphy-backend/out.zip
+            deployment_package: deploy.zip
 
         

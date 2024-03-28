@@ -49,7 +49,7 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Dotnet Publish
-      run: dotnet publish -c Release -o '${{ github.workspace }}/out'
+      run: dotnet publish -c Release --property:PublishDir='${{ github.workspace }}/out'
   
     - name: Zip Package
       run: |

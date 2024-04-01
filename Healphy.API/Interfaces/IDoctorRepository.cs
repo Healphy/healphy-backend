@@ -7,7 +7,7 @@ namespace Healphy.API.Interfaces
         Task<Doctor> Create(Doctor doctor);
         Task<Doctor> Update(Doctor doctor);
         Task<Doctor> Delete(Doctor doctor);
-        Task<Doctor> Get(Doctor doctor);
+        Task<IEnumerable<Doctor>> Get();
         Task<Doctor> GetDoctorById(int? id);
         Task<Doctor> GetDoctorByCrm(string? crm);
         Task<Doctor> GetDoctorBySpeciality(string? speciality);

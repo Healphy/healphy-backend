@@ -7,6 +7,6 @@ namespace Healphy.API.Interfaces
         Task<Address> Create(Address address);
         Task<Address> Update(Address address);
         Task<Address> Delete(Address address);
-        Task<Address> Get(Address address);
+        Task<IEnumerable<Address>> Get();
     }
 }

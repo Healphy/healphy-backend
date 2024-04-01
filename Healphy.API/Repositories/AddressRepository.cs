@@ -1,6 +1,7 @@
 ﻿using Healphy.API.Data;
 using Healphy.API.Interfaces;
 using Healphy.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Healphy.API.Repositories
 {
@@ -12,24 +13,30 @@ namespace Healphy.API.Repositories
             _addressContext = context;
         }
 
-        public Task<Address> Create(Address address)
+        public async Task<Address> Create(Address address)
         {
-            throw new NotImplementedException();
+            _addressContext.Add(address);
+            await _addressContext.SaveChangesAsync();
+            return address;
         }
 
-        public Task<Address> Delete(Address address)
+        public async Task<Address> Delete(Address address)
         {
-            throw new NotImplementedException();
+            _addressContext.Remove(address);
+            await _addressContext.SaveChangesAsync();
+            return address;
         }
 
-        public Task<Address> Get(Address address)
+        public async Task<IEnumerable<Address>> Get()
         {
-            throw new NotImplementedException();
+            return await _addressContext.Address.ToListAsync();
         }
 
-        public Task<Address> Update(Address address)
+        public async Task<Address> Update(Address address)
         {
-            throw new NotImplementedException();
+            _addressContext.Entry(address).State = EntityState.Modified;
+            await _addressContext.SaveChangesAsync();
+            return address;
         }
     }
 }

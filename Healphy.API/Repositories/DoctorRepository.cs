@@ -1,6 +1,7 @@
 ﻿using Healphy.API.Data;
 using Healphy.API.Interfaces;
 using Healphy.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Healphy.API.Repositories
 {
@@ -13,39 +14,45 @@ namespace Healphy.API.Repositories
             _doctorContext = context;
         }
 
-        public Task<Doctor> Create(Doctor doctor)
+        public async Task<Doctor> Create(Doctor doctor)
         {
-            throw new NotImplementedException();
+            _doctorContext.Add(doctor);
+            await _doctorContext.SaveChangesAsync();
+            return doctor;
         }
 
-        public Task<Doctor> Delete(Doctor doctor)
+        public async Task<Doctor> Delete(Doctor doctor)
         {
-            throw new NotImplementedException();
+            _doctorContext.Remove(doctor);
+            await _doctorContext.SaveChangesAsync();
+            return doctor;
         }
 
-        public Task<Doctor> Get(Doctor doctor)
+        public async Task<IEnumerable<Doctor>> Get()
         {
-            throw new NotImplementedException();
+            return await _doctorContext.Doctor.ToListAsync();
         }
 
-        public Task<Doctor> GetDoctorByCrm(string? crm)
+        public async Task<Doctor> GetDoctorByCrm(string? crm)
         {
-            throw new NotImplementedException();
+            return await _doctorContext.Doctor.FirstOrDefaultAsync(x => x.Crm == crm);
         }
 
-        public Task<Doctor> GetDoctorById(int? id)
+        public async Task<Doctor> GetDoctorById(int? id)
         {
-            throw new NotImplementedException();
+            return await _doctorContext.Doctor.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<Doctor> GetDoctorBySpeciality(string? speciality)
+        public async Task<Doctor> GetDoctorBySpeciality(string? speciality)
         {
-            throw new NotImplementedException();
+            return await _doctorContext.Doctor.FirstOrDefaultAsync(x => x.Speciality == speciality);
         }
 
-        public Task<Doctor> Update(Doctor doctor)
+        public async Task<Doctor> Update(Doctor doctor)
         {
-            throw new NotImplementedException();
+            _doctorContext.Update(doctor);
+            await _doctorContext.SaveChangesAsync();
+            return doctor;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Healphy.API.Data;
 using Healphy.API.Interfaces;
 using Healphy.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Healphy.API.Repositories
 {
@@ -12,24 +13,30 @@ namespace Healphy.API.Repositories
             _appointmentContext = context;
         }
 
-        public Task<Appointment> Create(Appointment appointment)
+        public async Task<Appointment> Create(Appointment appointment)
         {
-            throw new NotImplementedException();
+            _appointmentContext.Add(appointment);
+            await _appointmentContext.SaveChangesAsync();
+            return appointment;
         }
 
-        public Task<Appointment> Delete(Appointment appointment)
+        public async Task<Appointment> Delete(Appointment appointment)
         {
-            throw new NotImplementedException();
+            _appointmentContext.Remove(appointment);
+            await _appointmentContext.SaveChangesAsync();
+            return appointment;
         }
 
-        public Task<Appointment> Get(Appointment appointment)
+        public async Task<IEnumerable<Appointment>> Get()
         {
-            throw new NotImplementedException();
+            return await _appointmentContext.Appointment.ToListAsync();
         }
-
-        public Task<Appointment> Update(Appointment appointment)
+ 
+        public async Task<Appointment> Update(Appointment appointment)
         {
-            throw new NotImplementedException();
+            _appointmentContext.Update(appointment);
+            await _appointmentContext.SaveChangesAsync();
+            return appointment;
         }
     }
 }

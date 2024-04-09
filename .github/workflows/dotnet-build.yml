@@ -51,8 +51,8 @@ jobs:
     - name: Dotnet Publish
       run: dotnet publish -c Release --property:PublishDir='.'
 
-    - name: Zip Package
-      run: zip -r deploy.zip . -x '*.git*'
+    # - name: Zip Package
+    #   run: zip -r deploy.zip . -x '*.git*'
         
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
@@ -60,15 +60,15 @@ jobs:
         name: dotnet-results
         path: '.'
   
-    - name: Deploy Backend
-      uses: einaregilsson/beanstalk-deploy@v21
-      with:
-        aws_access_key: ${{ env.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-        region: us-east-1
-        application_name: healphy-backend
-        environment_name: healphy-env
-        version_label: ${{ github.run_id }}
-        deployment_package: deploy.zip
+    # - name: Deploy Backend
+    #   uses: einaregilsson/beanstalk-deploy@v21
+    #   with:
+    #     aws_access_key: ${{ env.AWS_ACCESS_KEY_ID }}
+    #     aws_secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+    #     region: us-east-1
+    #     application_name: healphy-backend
+    #     environment_name: healphy-env
+    #     version_label: ${{ github.run_id }}
+    #     deployment_package: deploy.zip
 
         

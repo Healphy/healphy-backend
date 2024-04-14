@@ -28,5 +28,26 @@ namespace Healphy.API.Controllers
         {
             return Ok(await _doctorRepository.Create(doctorObj));
         }
+
+        [HttpPut]
+        [Route("doctor")]
+        public async Task<ActionResult> Change(Doctor doctor)
+        {
+            await _doctorRepository.Update(doctor);
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("doctor/{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var doctorTemp = await _doctorRepository.GetDoctorById(id);
+
+            if (doctorTemp == null)
+                return NotFound("Médico não encontrado");
+
+            await _doctorRepository.Delete(doctorTemp);
+            return Ok();
+        }
     }
 }

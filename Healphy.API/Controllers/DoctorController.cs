@@ -1,4 +1,6 @@
-﻿using Healphy.API.Interfaces;
+﻿using AutoMapper;
+using Healphy.API.DTOs;
+using Healphy.API.Interfaces;
 using Healphy.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +10,12 @@ namespace Healphy.API.Controllers
     [Route("[controller]")]
     public class DoctorController : ControllerBase
     {
-        public readonly IDoctorRepository _doctorRepository;
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IMapper _mapper;
 
-        public DoctorController(IDoctorRepository doctorRepository)
+        public DoctorController(IDoctorRepository doctorRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _doctorRepository = doctorRepository;
         }
 
@@ -49,5 +53,21 @@ namespace Healphy.API.Controllers
             await _doctorRepository.Delete(doctorTemp);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("doctor/{id}")]
+        public async Task<ActionResult> GetDoctor(int id)
+        {
+            var doctorTemp = await _doctorRepository.GetDoctorById(id);
+
+            if (doctorTemp == null)
+                return NotFound("Médico não encontrado");
+
+            // Com DTO tu escolhe quais infos quer exibir na API
+            var doctorDTO = _mapper.Map<DoctorDTO>(doctorTemp);
+
+            return Ok(doctorDTO);
+        }
+
     }
 }

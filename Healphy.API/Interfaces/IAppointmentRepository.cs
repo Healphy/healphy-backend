@@ -7,6 +7,7 @@ namespace Healphy.API.Interfaces
         Task<Appointment> Create(Appointment appointment);
         Task<Appointment> Update(Appointment appointment);
         Task<Appointment> Delete(Appointment appointment);
+        Task<Appointment> GetAppointmentById(int? id);
         Task<IEnumerable<Appointment>> Get();
     }
 }

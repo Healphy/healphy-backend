@@ -8,6 +8,7 @@ namespace Healphy.API.Repositories
     public class AppointmentRepository : IAppointmentRepository
     {
         private readonly HealphyDbContext _appointmentContext;
+
         public AppointmentRepository(HealphyDbContext context) 
         {
             _appointmentContext = context;
@@ -15,6 +16,9 @@ namespace Healphy.API.Repositories
 
         public async Task<Appointment> Create(Appointment appointment)
         {
+            int doctorId = appointment.Doctor.Id;
+            Doctor existingDoctor = await _appointmentContext.Doctor.FirstOrDefaultAsync(x => x.Id == doctorId);
+
             _appointmentContext.Add(appointment);
             await _appointmentContext.SaveChangesAsync();
             return appointment;
@@ -37,6 +41,11 @@ namespace Healphy.API.Repositories
             _appointmentContext.Update(appointment);
             await _appointmentContext.SaveChangesAsync();
             return appointment;
+        }
+
+        public async Task<Appointment> GetAppointmentById(int? id)
+        {
+            return await _appointmentContext.Appointment.FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

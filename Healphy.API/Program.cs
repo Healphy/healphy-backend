@@ -1,5 +1,6 @@
 using Healphy.API.Data;
 using Healphy.API.Interfaces;
+using Healphy.API.Mapping;
 using Healphy.API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,8 @@ builder.Services.AddCors();
 
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddAutoMapper(typeof(EntitiesToDTOMappingProfile));
 
 string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Healphy.API.DTOs;
 using Healphy.API.Interfaces;
 using Healphy.API.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,9 @@ namespace Healphy.API.Controllers
         [Route("appointment")]
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments()
         {
-            return Ok(await _appointmentRepository.Get());
+            var appointmentsTemp = await _appointmentRepository.Get();
+            var appointmentsDTO = _mapper.Map<Appointment>(appointmentsTemp);
+            return Ok(appointmentsDTO);
         }
 
         [HttpPost]
@@ -61,6 +64,20 @@ namespace Healphy.API.Controllers
 
             await _appointmentRepository.Delete(appointmentTemp);
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("appointment/{id}")]
+        public async Task<ActionResult> GetAppointmentId(int id)
+        {
+            var appointmentTemp = await _appointmentRepository.GetAppointmentById(id);
+
+            if (appointmentTemp == null)
+                return NotFound("Consulta não encontrada");
+
+            var appointmentDTO = _mapper.Map<AppointmentDTO>(appointmentTemp);
+
+            return Ok(appointmentDTO);
         }
     }
 }

@@ -23,13 +23,16 @@ namespace Healphy.API.Controllers
         [Route("doctors")]
         public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctors()
         {
-            return Ok(await _doctorRepository.Get());
+            var doctorsTemp = await _doctorRepository.Get();
+            var doctorsDTO = _mapper.Map<IEnumerable<DoctorDTO>>(doctorsTemp);
+            return Ok(doctorsDTO);
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult<Doctor>> Register(Doctor doctorObj)
+        public async Task<ActionResult<Doctor>> Register(DoctorDTO doctorDTO)
         {
+            var doctorObj = _mapper.Map<Doctor>(doctorDTO);
             return Ok(await _doctorRepository.Create(doctorObj));
         }
 
@@ -67,6 +70,29 @@ namespace Healphy.API.Controllers
             var doctorDTO = _mapper.Map<DoctorDTO>(doctorTemp);
 
             return Ok(doctorDTO);
+        }
+
+        [HttpGet]
+        [Route("doctor/crm/{crm}")]
+        public async Task<ActionResult> GetDoctorCRM(string crm)
+        {
+            var doctorTemp = await _doctorRepository.GetDoctorByCrm(crm);
+
+            if (doctorTemp == null)
+                return NotFound("Médico não encontrado");
+
+            var doctorDTO = _mapper.Map<DoctorDTO>(doctorTemp);
+
+            return Ok(doctorDTO);
+        }
+
+        [HttpGet]
+        [Route("doctors/{speciality}")]
+        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctors(string speciality)
+        {
+            var doctorsTemp = await _doctorRepository.GetDoctorBySpeciality(speciality);
+            var doctorsDTO = _mapper.Map<IEnumerable<DoctorDTO>>(doctorsTemp);
+            return Ok(doctorsDTO);
         }
 
     }

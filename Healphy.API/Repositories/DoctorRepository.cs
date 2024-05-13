@@ -43,9 +43,9 @@ namespace Healphy.API.Repositories
             return await _doctorContext.Doctor.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<Doctor> GetDoctorBySpeciality(string? speciality)
+        public async Task<IEnumerable<Doctor>> GetDoctorBySpeciality(string? speciality)
         {
-            return await _doctorContext.Doctor.FirstOrDefaultAsync(x => x.Speciality == speciality);
+            return await _doctorContext.Doctor.Where(x => x.Speciality == speciality).ToListAsync();
         }
 
         public async Task<Doctor> Update(Doctor doctor)

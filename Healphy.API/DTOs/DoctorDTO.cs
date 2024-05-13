@@ -10,9 +10,6 @@ namespace Healphy.API.DTOs
         public string DoctorsName { get; set; }
         [Required]
         [StringLength(200)]
-        public string DoctorsLastName { get; set; }
-        [Required]
-        [StringLength(200)]
         public DateOnly BirthDate { get; set; }
         public string Gender { get; set; }
         [Required]
@@ -29,5 +26,8 @@ namespace Healphy.API.DTOs
         [Required]
         [StringLength(14)]
         public string Speciality { get; set; }
+        [Required]
+        public string DoctorsLastName { get; set; }
+        public string ProfilePhoto { get; set; }
     }
 }

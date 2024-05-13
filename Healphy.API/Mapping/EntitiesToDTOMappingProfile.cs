@@ -9,6 +9,7 @@ namespace Healphy.API.Mapping
         public EntitiesToDTOMappingProfile() 
         {
             CreateMap<Doctor, DoctorDTO>().ReverseMap();
+            CreateMap<Appointment, AppointmentDTO>().ReverseMap();
         }
     }
 }

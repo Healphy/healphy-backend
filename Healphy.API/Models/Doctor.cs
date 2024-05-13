@@ -12,5 +12,6 @@
         public string? Crm {  get; set; }
         public string? Cnpj { get; set; }
         public string? Speciality {  get; set; }
+        public string? ProfilePhoto { get; set; }
     }
 }

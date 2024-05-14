@@ -6,28 +6,27 @@ namespace Healphy.API.DTOs
     {
         public int Id { get; set; }
         [Required]
-        [StringLength(14)]
+        [StringLength(200)]
         public string DoctorsName { get; set; }
         [Required]
-        [StringLength(200)]
-        public DateOnly BirthDate { get; set; }
+        public string BirthDate { get; set; }
+        [Required]
         public string Gender { get; set; }
         [Required]
+        [StringLength(200)]
         public string Nationality { get; set; }
         [Required]
         [StringLength(200)]
         public string Email { get; set; }
         [Required]
-        [StringLength(200)]
+        [StringLength(6)]
         public string Crm { get; set; }
         [Required]
-        [StringLength(6)]
+        [StringLength(14)]
         public string Cnpj { get; set; }
         [Required]
-        [StringLength(14)]
         public string Speciality { get; set; }
-        [Required]
         public string DoctorsLastName { get; set; }
-        public string ProfilePhoto { get; set; }
+        public string? ProfilePhoto { get; set; }
     }
 }

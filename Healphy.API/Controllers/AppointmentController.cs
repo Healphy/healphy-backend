@@ -26,7 +26,7 @@ namespace Healphy.API.Controllers
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments()
         {
             var appointmentsTemp = await _appointmentRepository.Get();
-            var appointmentsDTO = _mapper.Map<Appointment>(appointmentsTemp);
+            var appointmentsDTO = _mapper.Map<IEnumerable<AppointmentDTO>>(appointmentsTemp);
             return Ok(appointmentsDTO);
         }
 

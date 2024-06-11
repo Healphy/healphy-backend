@@ -13,7 +13,7 @@
         public string AppointmentPrice { get; set; }
         public string Status { get; set; }
         public int DoctorId { get; set; } //Foreign Key
-        public Doctor Doctor { get; set; } // Navegation Property
+        public Doctor? Doctor { get; set; } // Navegation Property
 
     }
 }

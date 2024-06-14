@@ -9,9 +9,9 @@
         public DateTime DateTime { get; set; }
         public string HealthInsurance { get; set; }
         public string AppointmentDescription { get; set; }
-        public string Diagnostic {  get; set; }
+        public string? Diagnostic {  get; set; }
         public string AppointmentPrice { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
         public string? DoctorCrm { get; set; } //Foreign Key
         public Doctor? Doctor { get; set; } // Navegation Property
     }

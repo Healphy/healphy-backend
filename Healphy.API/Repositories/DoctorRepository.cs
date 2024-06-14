@@ -33,6 +33,11 @@ namespace Healphy.API.Repositories
             return await _doctorContext.Doctor.ToListAsync();
         }
 
+        public async Task<Doctor> GetDoctorByEmail(string? email)
+        {
+            return await _doctorContext.Doctor.FirstOrDefaultAsync(x => x.Email == email);
+        }
+
         public async Task<Doctor> GetDoctorByCrm(string? crm)
         {
             return await _doctorContext.Doctor.FirstOrDefaultAsync(x => x.Crm == crm);

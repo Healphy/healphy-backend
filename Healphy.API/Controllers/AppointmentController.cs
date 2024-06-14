@@ -34,11 +34,11 @@ namespace Healphy.API.Controllers
         [Route("appointment")]
         public async Task<ActionResult<Appointment>> RegisterApppointment(Appointment appointmentObj)
         {
-            int doctorId = appointmentObj.Doctor.Id;
-            var doctorTemp = await _doctorRepository.GetDoctorById(doctorId);
+            string doctorCrm = appointmentObj.Doctor.Crm;
+            var doctorTemp = await _doctorRepository.GetDoctorByCrm(doctorCrm);
 
             if (doctorTemp is null)
-                return BadRequest($"Médico com ID {doctorId} não foi encontrado");
+                return BadRequest($"Médico com CRM {doctorCrm} não foi encontrado");
 
             appointmentObj.Doctor = doctorTemp;
 

@@ -16,8 +16,8 @@ namespace Healphy.API.Repositories
 
         public async Task<Appointment> Create(Appointment appointment)
         {
-            int doctorId = appointment.Doctor.Id;
-            Doctor existingDoctor = await _appointmentContext.Doctor.FirstOrDefaultAsync(x => x.Id == doctorId);
+            string doctorCrm = appointment.Doctor.Crm;
+            Doctor existingDoctor = await _appointmentContext.Doctor.FirstOrDefaultAsync(x => x.Crm == doctorCrm);
 
             _appointmentContext.Add(appointment);
             await _appointmentContext.SaveChangesAsync();

@@ -12,11 +12,9 @@ namespace Healphy.API.Controllers
     {
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IDoctorRepository _doctorRepository;
-        private readonly IMapper _mapper;
 
-        public AppointmentController(IAppointmentRepository appointmentRepository, IMapper mapper, IDoctorRepository doctorRepository)
+        public AppointmentController(IAppointmentRepository appointmentRepository, IDoctorRepository doctorRepository)
         {
-            _mapper = mapper;
             _appointmentRepository = appointmentRepository;
             _doctorRepository = doctorRepository;
         }
@@ -26,8 +24,7 @@ namespace Healphy.API.Controllers
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments()
         {
             var appointmentsTemp = await _appointmentRepository.Get();
-            var appointmentsDTO = _mapper.Map<IEnumerable<AppointmentDTO>>(appointmentsTemp);
-            return Ok(appointmentsDTO);
+            return Ok(appointmentsTemp);
         }
 
         [HttpPost]
@@ -41,8 +38,9 @@ namespace Healphy.API.Controllers
                 return BadRequest($"Médico com CRM {doctorCrm} não foi encontrado");
 
             appointmentObj.Doctor = doctorTemp;
+            await _appointmentRepository.Create(appointmentObj);
 
-            return Ok(await _appointmentRepository.Create(appointmentObj));
+            return Created("Consulta registrada", appointmentObj);
         }
 
         [HttpPut]
@@ -75,9 +73,7 @@ namespace Healphy.API.Controllers
             if (appointmentTemp == null)
                 return NotFound("Consulta não encontrada");
 
-            var appointmentDTO = _mapper.Map<AppointmentDTO>(appointmentTemp);
-
-            return Ok(appointmentDTO);
+            return Ok(appointmentTemp);
         }
     }
 }
